@@ -45,23 +45,21 @@ function ImageViewing({ images, keyExtractor, imageIndex, visible, onRequestClos
       <View style={[styles.container, { opacity, backgroundColor }]} onLayout={(e) => {
         setLayout(e.nativeEvent.layout);
     }}>
+        {hideStatusBar ?
         <SafeAreaView style={[
-        styles.header,
-        {
-            backgroundColor: 'transparent',
-        },
-        headerStyle
-    ]}>
-          {hideStatusBar ?
-        <Animated.View style={[{ transform: headerTransform }]}>
+            styles.header,
+            { backgroundColor: 'transparent' },
+            headerStyle
+        ]}>
+            <Animated.View style={[{ transform: headerTransform }]}>
               {typeof HeaderComponent !== "undefined"
             ? (React.createElement(HeaderComponent, {
                 imageIndex: currentImageIndex,
             }))
             : (<ImageDefaultHeader onRequestClose={onRequestCloseEnhanced}/>)}
             </Animated.View>
+          </SafeAreaView>
         : null}
-        </SafeAreaView>
         <VirtualizedList ref={imageList} data={images} horizontal pagingEnabled windowSize={2} initialNumToRender={1} maxToRenderPerBatch={1} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} initialScrollIndex={imageIndex} getItem={(_, index) => images[index]} getItemCount={() => images.length} getItemLayout={(_, index) => ({
         length: layout.width,
         offset: layout.width * index,

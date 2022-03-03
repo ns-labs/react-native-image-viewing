@@ -121,16 +121,13 @@ function ImageViewing({
           setLayout(e.nativeEvent.layout);
         }}
       >
-        <SafeAreaView
-          style={[
-            styles.header,
-            {
-              backgroundColor: 'transparent',
-            },
-            headerStyle
-          ]}
-        >
-          {hideStatusBar ?
+        {hideStatusBar ?
+          <SafeAreaView
+            style={[
+              styles.header,
+              { backgroundColor: 'transparent' },
+              headerStyle
+            ]} >
             <Animated.View style={[{ transform: headerTransform }]}>
               {typeof HeaderComponent !== "undefined"
                 ? (
@@ -142,8 +139,8 @@ function ImageViewing({
                   <ImageDefaultHeader onRequestClose={onRequestCloseEnhanced} />
                 )}
             </Animated.View>
-            : null}
-        </SafeAreaView>
+          </SafeAreaView>
+          : null}
         <VirtualizedList
           ref={imageList}
           data={images}

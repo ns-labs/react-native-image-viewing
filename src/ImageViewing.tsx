@@ -92,6 +92,7 @@ function ImageViewing({
       // @ts-ignore
       imageList?.current?.setNativeProps({ scrollEnabled: !isScaled });
       toggleBarsVisible(!isScaled);
+      setHideStatusBar(false);
     },
     [imageList],
   );
@@ -120,8 +121,9 @@ function ImageViewing({
         onLayout={(e) => {
           setLayout(e.nativeEvent.layout);
         }}
+        onStartShouldSetResponder={() => { handleImageClick(); return true; }}
       >
-        {hideStatusBar ?
+        {hideStatusBar && typeof HeaderComponent !== "undefined" ?
           <SafeAreaView
             style={[
               styles.header,
@@ -176,7 +178,7 @@ function ImageViewing({
           //@ts-ignore
           keyExtractor={(imageSrc, index) => keyExtractor ? keyExtractor(imageSrc, index) : imageSrc.uri || `${imageSrc}`}
         />
-        {hideStatusBar ?
+        {hideStatusBar && typeof FooterComponent !== "undefined" ?
           <SafeAreaView
             style={[styles.footer, footerStyle]}>
             {typeof FooterComponent !== "undefined" && (

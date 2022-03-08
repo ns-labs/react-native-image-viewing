@@ -30,6 +30,7 @@ declare type Props = {
     }>;
     headerStyle: any;
     footerStyle: any;
+    statusBarStyle: any;
 };
 declare const EnhancedImageViewing: (props: Props) => JSX.Element;
 export default EnhancedImageViewing;

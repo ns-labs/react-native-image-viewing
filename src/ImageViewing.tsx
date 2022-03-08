@@ -14,7 +14,9 @@ import {
   VirtualizedList,
   ModalProps,
   Modal,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar,
+  Platform
 } from "react-native";
 
 import ImageItem from "./components/ImageItem/ImageItem";
@@ -44,6 +46,7 @@ type Props = {
   FooterComponent?: ComponentType<{ imageIndex: number }>;
   headerStyle: any;
   footerStyle: any;
+  statusBarStyle: any;
 };
 
 const DEFAULT_ANIMATION_TYPE = "fade";
@@ -67,8 +70,8 @@ function ImageViewing({
   HeaderComponent,
   FooterComponent,
   headerStyle,
-  footerStyle
-
+  footerStyle,
+  statusBarStyle
 }: Props) {
   const imageList = React.createRef<VirtualizedList<ImageSource>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
@@ -115,7 +118,13 @@ function ImageViewing({
       supportedOrientations={["portrait", "portrait-upside-down", "landscape", "landscape-left", "landscape-right"]}
       hardwareAccelerated
     >
-      <StatusBarManager presentationStyle={presentationStyle} />
+      {Platform.OS === "android" ?
+        <StatusBar
+          backgroundColor={statusBarStyle && statusBarStyle.backgroundColor ? statusBarStyle.backgroundColor : 'transparent'}
+          barStyle={statusBarStyle && statusBarStyle.barStyle ? statusBarStyle.barStyle : "light-content"} />
+        :
+        <StatusBarManager presentationStyle={presentationStyle} />
+      }
       <View
         style={[styles.container, { opacity, backgroundColor }]}
         onLayout={(e) => {

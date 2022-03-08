@@ -6,7 +6,7 @@
  *
  */
 import React, { useCallback, useEffect, useState } from "react";
-import { Animated, StyleSheet, View, VirtualizedList, Modal, SafeAreaView } from "react-native";
+import { Animated, StyleSheet, View, VirtualizedList, Modal, SafeAreaView, StatusBar, Platform } from "react-native";
 import ImageItem from "./components/ImageItem/ImageItem";
 import ImageDefaultHeader from "./components/ImageDefaultHeader";
 import StatusBarManager from "./components/StatusBarManager";
@@ -16,7 +16,7 @@ import useRequestClose from "./hooks/useRequestClose";
 const DEFAULT_ANIMATION_TYPE = "fade";
 const DEFAULT_BG_COLOR = "#000";
 const DEFAULT_DELAY_LONG_PRESS = 800;
-function ImageViewing({ images, keyExtractor, imageIndex, visible, onRequestClose, onLongPress = () => { }, onImageIndexChange, animationType = DEFAULT_ANIMATION_TYPE, backgroundColor = DEFAULT_BG_COLOR, presentationStyle, swipeToCloseEnabled, doubleTapToZoomEnabled, delayLongPress = DEFAULT_DELAY_LONG_PRESS, HeaderComponent, FooterComponent, headerStyle, footerStyle }) {
+function ImageViewing({ images, keyExtractor, imageIndex, visible, onRequestClose, onLongPress = () => { }, onImageIndexChange, animationType = DEFAULT_ANIMATION_TYPE, backgroundColor = DEFAULT_BG_COLOR, presentationStyle, swipeToCloseEnabled, doubleTapToZoomEnabled, delayLongPress = DEFAULT_DELAY_LONG_PRESS, HeaderComponent, FooterComponent, headerStyle, footerStyle, statusBarStyle }) {
     const imageList = React.createRef();
     const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
     const [layout, setLayout] = React.useState({ width: 0, height: 0 });
@@ -42,7 +42,10 @@ function ImageViewing({ images, keyExtractor, imageIndex, visible, onRequestClos
         setHideStatusBar(!hideStatusBar);
     };
     return (<Modal transparent={presentationStyle === "overFullScreen"} visible={visible} presentationStyle={presentationStyle} animationType={animationType} onRequestClose={onRequestCloseEnhanced} supportedOrientations={["portrait", "portrait-upside-down", "landscape", "landscape-left", "landscape-right"]} hardwareAccelerated>
-      <StatusBarManager presentationStyle={presentationStyle}/>
+      {Platform.OS === "android" ?
+        <StatusBar backgroundColor={statusBarStyle && statusBarStyle.backgroundColor ? statusBarStyle.backgroundColor : 'transparent'} barStyle={statusBarStyle && statusBarStyle.barStyle ? statusBarStyle.barStyle : "light-content"}/>
+        :
+            <StatusBarManager presentationStyle={presentationStyle}/>}
       <View style={[styles.container, { opacity, backgroundColor }]} onLayout={(e) => {
         setLayout(e.nativeEvent.layout);
     }} onStartShouldSetResponder={() => { handleImageClick(); return true; }}>
